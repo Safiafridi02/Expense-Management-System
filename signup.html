@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.min.css'></link>
+	<link rel="stylesheet" href="./signup.css">
+	<title>Document</title>
+</head>
+
+<body>
+
+	<div class="container">
+		<div class="webBody">
+			<h1>EXPENSE MANAGEMENT SYSTEM</h1>
+
+			<form id="form" autocomplete="off">
+				<label for="">Username</label>
+				<input class="form-element" id="userName" type="text" placeholder="username"><br>
+				<br>
+				<label for="">Email address</label>
+				<input class="form-element" id="email" type="email" placeholder="email@expense.com" ><br>
+				<br>
+				<label for="">Password</label>
+				<input class="form-element" id="password" type="password"	 placeholder="8 characters maximum" required><br>
+				<span id="passwordError"></span>
+				<br>
+				<label for="">Confirm password</label>
+				<input class="form-element" id="confirmPassword" type="password" placeholder="confirm your password" ><br>
+				<span id="confirmPasswordError"></span><br>
+				<button type="submit">Sign up</button>
+			</form>
+		</div>
+	</div>
+
+
+	<script src="./signup.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script> 
+</body>
+
+</html>
