@@ -11,8 +11,7 @@ let passError = document.getElementById("passwordError");
 let confirmPassError = document.getElementById("confirmPasswordError")
 let pass = false;
 
-password.onkeyup = function(){
-	console.log(password.value)
+password.onkeyup = () => {
 	if (password.value.length < 8) {
 		passError.style.color = "red";
 		passError.innerText = "Password must be greater than 8 characters";
@@ -20,12 +19,12 @@ password.onkeyup = function(){
 	} else {
 		pass = true;
 		passError.innerText = "";
-		console.log(password.value.length)
+		
 }
 
 }
 
-confirmPassword.onkeyup = function(){
+confirmPassword.onkeyup = () => {
 	if (password.value !== confirmPassword.value) {
 		confirmPassError.style.color = "red";
 		confirmPassError.innerText = "Password not matched";
@@ -38,11 +37,7 @@ confirmPassword.onkeyup = function(){
 
 form.addEventListener("submit", function signup(e) {
 	e.preventDefault();
-	// let email = email.value;
-	// let userName = userName.value;
-	// let password = password.value;
-	// let confirmPassword = confirmPassword.value;
-
+	
 	if (userName.value == "") {
 		swal("")
 		return false;
@@ -52,22 +47,7 @@ form.addEventListener("submit", function signup(e) {
 		return user.email == email;
 	});
 	if(pass == false) return false;
-	// if (password.length < 8) {
-	// 	passError.style.color = "red";
-	// 	passError.innerText = "Password must be greater than 8 characters";
-	// 	return false;
-	// } else {
-	// 	passError.innerText = "";
-	// }
-
-	// if (password !== confirmPassword) {
-	// 	confirmPassError.style.color = "red";
-	// 	confirmPassError.innerText = "Password not matched";
-	// 	return false;
-	// } else {
-	// 	confirmPassError.innerText = "";
-	// }
-	// }
+	
 
 	if (filtered) {
 		alert("Email already Exists");
@@ -85,8 +65,7 @@ form.addEventListener("submit", function signup(e) {
 
 
 		form.reset();
-		// successmessage.style.color = " white";
-		// successmessage.innerText = "Account Created Successfully";
+		
 		swal("", "Account Created Successfully", "success");
 		setTimeout(() => {
 			location.href = "./index.html";

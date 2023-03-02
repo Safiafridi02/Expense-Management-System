@@ -3,10 +3,8 @@ title.innerText = document.title.text = "Signup | Expense Managment System";
 let WelcomeUser = document.getElementById("user");
 let currentUser = JSON.parse(localStorage.getItem("currentUser"));
 WelcomeUser.innerText = currentUser ? `Welcome: ${currentUser[0].userName}` : "";
-
 let allExpense = JSON.parse(localStorage.getItem("allExpense")) || [];
 let allCategories = JSON.parse(localStorage.getItem("allCategories")) || [];
-console.log(allCategories);
 let filterExpense = allExpense?.filter(expense => expense.currentUserId == currentUser[0].userId);
 showTotal();
 function logout() {
@@ -43,19 +41,8 @@ function showCategories() {
 }
 
 showCategories();
-// let amounts = filterExpense.map(function(expense){
-// 	return +expense.expAmount;
-// });
-// console.log(amounts);
-// let total = amounts.reduce(function(acc,curr){
-// 	return acc += curr
-// },0);
-// console.log(total);
 
-// document.getElementById("total").innerText = `Total: Rs.${total}/-`
 function showExpense() {
-
-	console.log(filterExpense);
 	for (let i = 0; i < filterExpense.length; i++) {
 		let tableRow = document.createElement("tr");
 		let expId = filterExpense[i].expenseId;
@@ -70,8 +57,17 @@ function showExpense() {
 		tableRow.appendChild(expCatCloumn);
 		let expDesc = filterExpense[i].expDes;
 		let expDescCloumn = document.createElement("td");
+		expDescCloumn.className = "d-flex justify-content-between";
+		let descSpan = document.createElement("span");
 		let expDescText = document.createTextNode(expDesc);
-		expDescCloumn.appendChild(expDescText);
+		let supCat = document.createElement("sup");
+		let catSup = document.createElement("i");
+		catSup.className = 'fa fa-edit mt-3';
+		catSup.onclick = () => editEntry(2,expDesc, expId, tableRow);
+		descSpan.appendChild(expDescText);
+		expDescCloumn.appendChild(descSpan);
+		supCat.appendChild(catSup);
+		expDescCloumn.appendChild(supCat);
 		tableRow.appendChild(expDescCloumn);
 		let expAmount = filterExpense[i].expAmount;
 		let expAmountCloumn = document.createElement("td");
@@ -87,9 +83,7 @@ function showExpense() {
 
 		let actionColumn = document.createElement("td");
 		let delBtn = document.createElement("button");
-		let EditBtn = document.createElement("button");
 		let btnText = document.createTextNode("Remove");
-		let EditText = document.createTextNode("Edit");
 		delBtn.appendChild(btnText);
 		delBtn.className = "btn btn-danger my-2 w-100";
 		delBtn.onclick = function () {
@@ -119,45 +113,10 @@ function showExpense() {
 			})
 		}
 		actionColumn.appendChild(delBtn);
-
-		tableRow.appendChild(actionColumn);
-		EditBtn.appendChild(EditText);
-		EditBtn.className = "btn btn-primary w-100";
-		EditBtn.onclick = function () {
-			swal({
-				title: 'Are you sure?',
-				text: "You want to Edit Your Expense",
-				type: 'warning',
-				showCancelButton: true,
-				cancelButtonColor: '#d33',
-				input: "text",
-				inputValue: expDesc,
-				// showCancelButton: true,
-				// confirmButtonColor: '#3085d6',
-				// cancelButtonColor: '#d33',
-				// confirmButtonText: 'Yes, delete it!'
-			}).then((result) => {
-				console.log(result)
-				if (result.value) {
-
-					editItem(expId, result.value);
-					tableRow.cells[2].innerText = result.value;
-					swal(
-						'Edited!',
-						'Your file has been changed.',
-						'success'
-					)
-
-					showTotal();
-				} else {
-					swal("Your Entry is unchanged!")
-				}
-
-			})
-		}
-		actionColumn.appendChild(EditBtn);
+		// tableRow.appendChild(actionColumn);
 		tableRow.appendChild(actionColumn);
 		document.getElementById("expenseTable").appendChild(tableRow);
+		// console.log(tableRow.cells[2].children[0]);
 	}
 
 }
@@ -235,8 +194,44 @@ function addExpense() {
 	tableRow.appendChild(expCatCloumn);
 	let expDesc = expenseDetails.expDes;
 	let expDescCloumn = document.createElement("td");
+	let descSpan = document.createElement("span");
 	let expDescText = document.createTextNode(expDesc);
-	expDescCloumn.appendChild(expDescText);
+	let supCat = document.createElement("sup");
+	let catSup = document.createElement("i");
+	catSup.className = 'fa fa-edit';
+	catSup.onclick = function () {
+		swal({
+			title: 'Are you sure?',
+			text: "You want to Edit Your Expense",
+			type: 'warning',
+			showCancelButton: true,
+			cancelButtonColor: '#d33',
+			input: "text",
+			inputValue: expDesc,
+		}).then((result) => {
+			console.log(result)
+			if (result.value) {
+
+				editItem(expId, result.value);
+				tableRow.cells[2].innerText = result.value;
+				console.log(tableRow.cells[2]);
+				swal(
+					'Edited!',
+					'Your file has been changed.',
+					'success'
+				)
+
+				showTotal();
+			} else {
+				swal("Your Entry is unchanged!")
+			}
+
+		})
+	}
+	descSpan.appendChild(expDescText);
+	expDescCloumn.appendChild(descSpan);
+	supCat.appendChild(catSup);
+	expDescCloumn.appendChild(supCat);
 	tableRow.appendChild(expDescCloumn);
 	let expAmn = expenseDetails.expAmount;
 	let expAmountCloumn = document.createElement("td");
@@ -403,4 +398,37 @@ function search() {
 			}
 		}
 	}
+}
+
+function editEntry(index, previousValue, id, row) {
+	console.log(previousValue)
+	swal({
+		title: 'Are you sure?',
+		text: "You want to Edit Your Expense",
+		type: 'warning',
+		showCancelButton: true,
+		cancelButtonColor: '#d33',
+		input: "text",
+		inputValue: previousValue,
+	}).then((result) => {
+		console.log(result)
+		if (result.value) {
+
+			editItem(id, result.value);
+			row.cells[index].children[0].innerText = result.value;
+			// console.log(tableRow.cells[2]);
+			if(result.value != previousValue){
+				swal(
+					'Edited!',
+					'Your file has been changed.',
+					'success'
+				)
+			}
+
+			showTotal();
+		} else {
+			swal("Your Entry is unchanged!")
+		}
+
+	})
 }
